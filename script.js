@@ -37,6 +37,8 @@ var sideMargin = canvas.width*0.05;
 var topMargin = canvas.height*0.95;
 var bottomMargin = canvas.height*0.02;
 var unsortedArray;
+var isSorting = false;
+var sortingSpeed = 2 //1 = an operation per second
 
 start();
 
@@ -50,15 +52,42 @@ function start(){
 function update(){
     window.requestAnimationFrame(update);
    
+    if(isSorting){
+        sortNumberArray();
+        //execute once
+        isSorting = false 
+    }
+
     resetCanvas();
     drawGraph();
+}
+
+function sortNumberArray(){
+    
+    setInterval(()=>{
+        console.log('toma')
+    },1000/sortingSpeed)
+  
 }
 
 function createUnsortedArray(size){
     let array = [];
     
+    for(let i = 0; i<size;i++){
+        array.push(i);
+    }
+    for(let i = 0; i<size;i++){
+        let a = Math.floor(Math.random()*size);
+        let b = Math.floor(Math.random()*size);
+        let c;
+        c = array[a];
+        array[a] = array[b];
+        array[b] = c;
+    }
 
-    /* USING SETS*/
+    /* USING SETS - complexity directly dependent on Math.random(), 
+    which may generate instances with a overwhelming amount of loops.
+
     while(array.length != size){
         let num = Math.floor(Math.random()*size+1);
         array.push(num)
@@ -71,7 +100,7 @@ function createUnsortedArray(size){
                 }
             })
         })
-    }   /**/
+    }   */
     return array;
 }
 
