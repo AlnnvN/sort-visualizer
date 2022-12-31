@@ -33,31 +33,36 @@ class Column{
         return new Column().width;
     }
 }
-var sideMargin = canvas.width*0.05;
-var topMargin = canvas.height*0.95;
-var bottomMargin = canvas.height*0.02;
-var unsortedArray;
-var isSorting = true;
-var sortingSpeed = 0 //delay between operations
-var sortersQnt = 3000; //comparisons per operation
 
 class BubbleSort{
-    constructor(){
+    constructor(sortOrder){
+        this.sortOrder = sortOrder;
         this.i = 0;
         this.isSortedCounter = 0;
     }
 
+    sort(){
+        if(this.sortOrder === 'increasing'){
+            this.increasing();
+            return;
+        }
+        else if(this.sortOrder === 'decreasing'){
+            this.decreasing();
+            return;
+        }
+    }
+
     increasing(){
-        this.sort(unsortedArray[this.i] > unsortedArray[this.i + 1]);
+        this.sortingAlgorithm(unsortedArray[this.i] > unsortedArray[this.i + 1]);
         return;
     }
 
     decreasing(){
-        this.sort(unsortedArray[this.i] < unsortedArray[this.i + 1]);
+        this.sortingAlgorithm(unsortedArray[this.i] < unsortedArray[this.i + 1]);
         return;
     }
 
-    sort(sortCondition){
+    sortingAlgorithm(sortCondition){
             //sort increasing
             if (sortCondition) {
                 let c = unsortedArray[this.i];
@@ -83,96 +88,89 @@ class BubbleSort{
     }
 }
 
-start();
+//inner settings
+var sideMargin = canvas.width*0.05;
+var topMargin = canvas.height*0.95;
+var bottomMargin = canvas.height*0.02;
 
-canvas.addEventListener('click', sortNumberArray)
+//global variables
+var unsortedArray;
+var isSorting = true;
+
+//user input / settings
+var unsortedArraySize = 1000;
+var sortOrder = 'increasing';
+var sortingSpeed = 0 //delay between operations
+var sortersQnt = 3000; //comparisons per operation
+
+
+start();
+//click anywhere on the screen to start sorting
+canvas.addEventListener('click', sortNumberArray);
 
 //FUNCTIONS
 function start(){
-    unsortedArray = createUnsortedArray(1000);    
-    update();
+    unsortedArray = createUnsortedArray(unsortedArraySize);    
+    updateCanvas();
     return;
 }
 
-function update(){
-    window.requestAnimationFrame(update);
+function updateCanvas(){
+    window.requestAnimationFrame(updateCanvas);
     resetCanvas();
     drawGraph();
+    return;
 }
 
 function sortNumberArray(){
-    //let isSortedCounter = 0;
-    let bubbleSort = new BubbleSort();
+    let bubbleSort = new BubbleSort(sortOrder);
 
-    var loop = function () {
-        setTimeout(function () {
+    var loop = function () { //infinite loop
+        let timeout = setTimeout(function () { //delay between operations
             if(isSorting){
+                //define comparisons per operation
                 for(let k =0; k<sortersQnt; k++){
-                    //sortLoop();    
-                    bubbleSort.increasing();     
+                    bubbleSort.sort();  
                 }
-                window.requestAnimationFrame(loop);
+                
             }
             else{
+                //clear set timeouts and return
+                clearTimeout(timeout);
                 return;
             }
-              
-        }, sortingSpeed);
+            //mantain loop if it doesn't return
+            window.requestAnimationFrame(loop);
+        }, sortingSpeed); //delay value
     }
 
     if(isSorting){
         window.requestAnimationFrame(loop);
     }
-    
-
-    //FUNCTIONS
-    function sortLoop() {
-        let i;
-            //initialize i
-            if(i === undefined){
-                i = 0;
-                console.log(i)
-            }
-
-            //sort increasing
-            if (unsortedArray[i] > unsortedArray[i + 1]) {
-                let c = unsortedArray[i];
-                unsortedArray[i] = unsortedArray[i + 1];
-                unsortedArray[i + 1] = c;
-                isSortedCounter = 0;
-            }
-            else{
-                isSortedCounter++
-            }
-
-            //check if its sorted
-            if(isSortedCounter >= unsortedArray.length){
-                isSorting = false; 
-            }
-    
-            i++; //next index
-
-            //if loop through the array back from the start
-            if (i >= unsortedArray.length - 1) {
-                i = 0;
-            }
-    }
-
+    return;
 }
 
 function createUnsortedArray(size){
     let array = [];
     
-    for(let i = 0; i<size;i++){
-        array.push(i);
+    fillArray(array);
+    shuffleArray(array);
+
+    function shuffleArray(array) {
+        for (let i = 0; i < size * 2; i++) {
+            let a = Math.floor(Math.random() * size);
+            let b = Math.floor(Math.random() * size);
+            let c;
+            c = array[a];
+            array[a] = array[b];
+            array[b] = c;
+        }
     }
-    for(let i = 0; i<size*2;i++){
-        let a = Math.floor(Math.random()*size);
-        let b = Math.floor(Math.random()*size);
-        let c;
-        c = array[a];
-        array[a] = array[b];
-        array[b] = c;
+
+    function fillArray(array) {
+        for (let i = 0; i < size; i++) {
+            array.push(i);
+        }
     }
 
     /*USING SETS - complexity directly dependent on Math.random(), 
@@ -206,12 +204,13 @@ function drawGraph(){
 }
 
 function drawColumn(x, value, maxValue){
-    cleiton = new Column(x, value, maxValue);
-    cleiton.draw();
+    column = new Column(x, value, maxValue);
+    column.draw();
     return;
 }
 
 function mapNumberRange(number, fromLow, toLow, fromHigh, toHigh){
+    //rule of three considering ranges
     i = toLow - fromLow;
     j = toHigh - fromHigh;
 
@@ -221,12 +220,13 @@ function mapNumberRange(number, fromLow, toLow, fromHigh, toHigh){
 function resetCanvas(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
     drawCanvasBackground('#EF2D56');
-    return;
-}
 
-function drawCanvasBackground(color){
-    ctx.fillStyle = color;
-    ctx.fillRect(0,0,canvas.width,canvas.height);
+    function drawCanvasBackground(color){
+        ctx.fillStyle = color;
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+        return;
+    }
+
     return;
 }
 
