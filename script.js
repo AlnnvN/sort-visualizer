@@ -39,7 +39,7 @@ var bottomMargin = canvas.height*0.02;
 var unsortedArray;
 var isSorting = true;
 var sortingSpeed = 0 //delay between operations
-var sortersQnt = 2;
+var sortersQnt = 400; //sorts per operation
 
 start();
 
@@ -98,16 +98,21 @@ function sortNumberArray(){
     }*/
     
     var loop = function () {
-        isSorting = false    
-        //if(isSorting){
-            for(let i =0; i<sortersQnt; i++){
-                console.log('CALLING LOOP')
-                sortLoop();
+        setTimeout(function () {
+            if(isSorting){
+                for(let i =0; i<sortersQnt; i++){
+                    console.log('CALLING LOOP')
+                    sortLoop();
+                }
+                window.requestAnimationFrame(loop);
             }
-            //execute once
-           // 
-       // }
-    };
+            else{
+                return;
+            }
+              
+        }, sortingSpeed);
+    }
+
     if(j<unsortedArray.length+1){
         window.requestAnimationFrame(loop);
     }
@@ -115,7 +120,7 @@ function sortNumberArray(){
 
     //FUNCTIONS
     function sortLoop() {
-        setTimeout(function () {
+       
 
             if (unsortedArray[i] > unsortedArray[i + 1]) {
                 let c = unsortedArray[i];
@@ -133,11 +138,9 @@ function sortNumberArray(){
             }
 
             if (j>=unsortedArray.length+1) {
-                return;
-            }else{
-                window.requestAnimationFrame(loop);
+                isSorting = false;
             }
-        }, sortingSpeed);
+        
     }
 }
 
