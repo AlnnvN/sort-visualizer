@@ -39,7 +39,7 @@ var bottomMargin = canvas.height*0.02;
 var unsortedArray;
 var isSorting = true;
 var sortingSpeed = 0 //delay between operations
-var sortersQnt = 400; //sorts per operation
+var sortersQnt = 3000; //sorts per operation
 
 start();
 
@@ -61,41 +61,6 @@ function update(){
 function sortNumberArray(){
     let i = 0
     let j = 0
-    /*
-    if(isSorting){
-        for(let i =0; i<sortersQnt; i++){
-            console.log('creating sorter')
-            setInterval(()=>{
-                sortLoop();
-            },10*i)
-        }
-        //execute once
-        isSorting = false 
-    }
-
-    function sortLoop(){
-        
-        setInterval(()=>{
-            if (unsortedArray[i] > unsortedArray[i + 1]) {
-                let c = unsortedArray[i];
-                unsortedArray[i] = unsortedArray[i + 1];
-                unsortedArray[i + 1] = c;
-                console.log('sorting');
-    
-            }
-    
-            i++;
-    
-            if (i >= unsortedArray.length - 1) {
-                j++;
-                i = 0;
-            }
-    
-            if (j>=unsortedArray.length+1) {
-                return;
-            }
-        },sortingSpeed)
-    }*/
     
     var loop = function () {
         setTimeout(function () {
@@ -120,16 +85,14 @@ function sortNumberArray(){
 
     //FUNCTIONS
     function sortLoop() {
-       
-
             if (unsortedArray[i] > unsortedArray[i + 1]) {
                 let c = unsortedArray[i];
                 unsortedArray[i] = unsortedArray[i + 1];
                 unsortedArray[i + 1] = c;
-                //console.log(j);
+              
 
             }
-            //console.log('sorting')
+            
             i++;
 
             if (i >= unsortedArray.length - 1) {
@@ -140,7 +103,6 @@ function sortNumberArray(){
             if (j>=unsortedArray.length+1) {
                 isSorting = false;
             }
-        
     }
 }
 
@@ -150,7 +112,7 @@ function createUnsortedArray(size){
     for(let i = 0; i<size;i++){
         array.push(i);
     }
-    for(let i = 0; i<size;i++){
+    for(let i = 0; i<size*2;i++){
         let a = Math.floor(Math.random()*size);
         let b = Math.floor(Math.random()*size);
         let c;
@@ -159,9 +121,9 @@ function createUnsortedArray(size){
         array[b] = c;
     }
 
-    /* USING SETS - complexity directly dependent on Math.random(), 
+    /*USING SETS - complexity directly dependent on Math.random(), 
     which may generate instances with a overwhelming amount of loops.
-
+    Usage limited to small array sizes
     while(array.length != size){
         let num = Math.floor(Math.random()*size+1);
         array.push(num)
@@ -174,7 +136,7 @@ function createUnsortedArray(size){
                 }
             })
         })
-    }   */
+    }  */ 
     return array;
 }
 
