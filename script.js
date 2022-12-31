@@ -37,37 +37,108 @@ var sideMargin = canvas.width*0.05;
 var topMargin = canvas.height*0.95;
 var bottomMargin = canvas.height*0.02;
 var unsortedArray;
-var isSorting = false;
-var sortingSpeed = 2 //1 = an operation per second
+var isSorting = true;
+var sortingSpeed = 0 //delay between operations
+var sortersQnt = 2;
 
 start();
 
+canvas.addEventListener('click', sortNumberArray)
+
 //FUNCTIONS
 function start(){
-    unsortedArray = createUnsortedArray(20);    
+    unsortedArray = createUnsortedArray(1000);    
     update();
     return;
 }
 
 function update(){
     window.requestAnimationFrame(update);
-   
-    if(isSorting){
-        sortNumberArray();
-        //execute once
-        isSorting = false 
-    }
-
     resetCanvas();
     drawGraph();
 }
 
 function sortNumberArray(){
+    let i = 0
+    let j = 0
+    /*
+    if(isSorting){
+        for(let i =0; i<sortersQnt; i++){
+            console.log('creating sorter')
+            setInterval(()=>{
+                sortLoop();
+            },10*i)
+        }
+        //execute once
+        isSorting = false 
+    }
+
+    function sortLoop(){
+        
+        setInterval(()=>{
+            if (unsortedArray[i] > unsortedArray[i + 1]) {
+                let c = unsortedArray[i];
+                unsortedArray[i] = unsortedArray[i + 1];
+                unsortedArray[i + 1] = c;
+                console.log('sorting');
     
-    setInterval(()=>{
-        console.log('toma')
-    },1000/sortingSpeed)
-  
+            }
+    
+            i++;
+    
+            if (i >= unsortedArray.length - 1) {
+                j++;
+                i = 0;
+            }
+    
+            if (j>=unsortedArray.length+1) {
+                return;
+            }
+        },sortingSpeed)
+    }*/
+    
+    var loop = function () {
+        isSorting = false    
+        //if(isSorting){
+            for(let i =0; i<sortersQnt; i++){
+                console.log('CALLING LOOP')
+                sortLoop();
+            }
+            //execute once
+           // 
+       // }
+    };
+    if(j<unsortedArray.length+1){
+        window.requestAnimationFrame(loop);
+    }
+    
+
+    //FUNCTIONS
+    function sortLoop() {
+        setTimeout(function () {
+
+            if (unsortedArray[i] > unsortedArray[i + 1]) {
+                let c = unsortedArray[i];
+                unsortedArray[i] = unsortedArray[i + 1];
+                unsortedArray[i + 1] = c;
+                //console.log(j);
+
+            }
+            //console.log('sorting')
+            i++;
+
+            if (i >= unsortedArray.length - 1) {
+                j++;
+                i = 0;
+            }
+
+            if (j>=unsortedArray.length+1) {
+                return;
+            }else{
+                window.requestAnimationFrame(loop);
+            }
+        }, sortingSpeed);
+    }
 }
 
 function createUnsortedArray(size){
@@ -142,13 +213,13 @@ function drawCanvasBackground(color){
 
 function createCanvas(){
     let canvas = document.querySelector('canvas');
-    ratio = window.devicePixelRatio;
+    let ratio = Math.ceil(window.devicePixelRatio);
 
     canvas.width = window.innerWidth * ratio;
     canvas.height = window.innerHeight * ratio;
 
-    canvas.style.width = window.innerWidth;
-    canvas.style.height = window.innerHeight;
+    canvas.style.width = window.innerWidth+'px';
+    canvas.style.height = window.innerHeight+'px';
 
     return canvas;
 }
