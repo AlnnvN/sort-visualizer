@@ -59,15 +59,16 @@ function update(){
 }
 
 function sortNumberArray(){
-    let i = 0
-    let j = 0
-    
+    let i = 0;
+    let j = 0;
+    let isSortedCounter = 0;
+
     var loop = function () {
         setTimeout(function () {
             if(isSorting){
-                for(let i =0; i<sortersQnt; i++){
+                for(let k =0; k<sortersQnt; k++){
                     console.log('CALLING LOOP')
-                    sortLoop();
+                    sortLoop();         
                 }
                 window.requestAnimationFrame(loop);
             }
@@ -78,7 +79,7 @@ function sortNumberArray(){
         }, sortingSpeed);
     }
 
-    if(j<unsortedArray.length+1){
+    if(isSorting){
         window.requestAnimationFrame(loop);
     }
     
@@ -89,21 +90,24 @@ function sortNumberArray(){
                 let c = unsortedArray[i];
                 unsortedArray[i] = unsortedArray[i + 1];
                 unsortedArray[i + 1] = c;
-              
-
+                isSortedCounter = 0;
             }
-            
+            else{
+                isSortedCounter++
+            }
+
+            if(isSortedCounter >= unsortedArray.length){
+                isSorting = false; //is sorted
+            }
+    
             i++;
 
             if (i >= unsortedArray.length - 1) {
                 j++;
                 i = 0;
             }
-
-            if (j>=unsortedArray.length+1) {
-                isSorting = false;
-            }
     }
+
 }
 
 function createUnsortedArray(size){
