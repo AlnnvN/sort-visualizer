@@ -39,7 +39,49 @@ var bottomMargin = canvas.height*0.02;
 var unsortedArray;
 var isSorting = true;
 var sortingSpeed = 0 //delay between operations
-var sortersQnt = 3000; //sorts per operation
+var sortersQnt = 3000; //comparisons per operation
+
+class BubbleSort{
+    constructor(){
+        this.i = 0;
+        this.isSortedCounter = 0;
+    }
+
+    increasing(){
+        this.sort(unsortedArray[this.i] > unsortedArray[this.i + 1]);
+        return;
+    }
+
+    decreasing(){
+        this.sort(unsortedArray[this.i] < unsortedArray[this.i + 1]);
+        return;
+    }
+
+    sort(sortCondition){
+            //sort increasing
+            if (sortCondition) {
+                let c = unsortedArray[this.i];
+                unsortedArray[this.i] = unsortedArray[this.i + 1];
+                unsortedArray[this.i + 1] = c;
+                this.isSortedCounter = 0;
+            }
+            else{
+                this.isSortedCounter++
+            }
+
+            //check if its sorted
+            if(this.isSortedCounter >= unsortedArray.length){
+                isSorting = false; 
+            }
+    
+            this.i++; //next index
+
+            //if loop through the array back from the start
+            if (this.i >= unsortedArray.length - 1) {
+                this.i = 0;
+            }
+    }
+}
 
 start();
 
@@ -59,16 +101,15 @@ function update(){
 }
 
 function sortNumberArray(){
-    let i = 0;
-    let j = 0;
-    let isSortedCounter = 0;
+    //let isSortedCounter = 0;
+    let bubbleSort = new BubbleSort();
 
     var loop = function () {
         setTimeout(function () {
             if(isSorting){
                 for(let k =0; k<sortersQnt; k++){
-                    console.log('CALLING LOOP')
-                    sortLoop();         
+                    //sortLoop();    
+                    bubbleSort.increasing();     
                 }
                 window.requestAnimationFrame(loop);
             }
@@ -86,6 +127,14 @@ function sortNumberArray(){
 
     //FUNCTIONS
     function sortLoop() {
+        let i;
+            //initialize i
+            if(i === undefined){
+                i = 0;
+                console.log(i)
+            }
+
+            //sort increasing
             if (unsortedArray[i] > unsortedArray[i + 1]) {
                 let c = unsortedArray[i];
                 unsortedArray[i] = unsortedArray[i + 1];
@@ -96,14 +145,15 @@ function sortNumberArray(){
                 isSortedCounter++
             }
 
+            //check if its sorted
             if(isSortedCounter >= unsortedArray.length){
-                isSorting = false; //is sorted
+                isSorting = false; 
             }
     
-            i++;
+            i++; //next index
 
+            //if loop through the array back from the start
             if (i >= unsortedArray.length - 1) {
-                j++;
                 i = 0;
             }
     }
