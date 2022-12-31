@@ -20,7 +20,6 @@ class Column{
     }
 
     draw(){
-        console.log(`drawing column at ${this.x}`);
         ctx.fillStyle = "#FFFFFC";
         ctx.fillRect(this.x, canvas.height-bottomMargin, this.width, -this.height);
         return;
@@ -43,23 +42,36 @@ start();
 
 //FUNCTIONS
 function start(){
-    unsortedArray = createUnsortedArray(1);    
+    unsortedArray = createUnsortedArray(20);    
     update();
     return;
 }
 
 function update(){
     window.requestAnimationFrame(update);
-    unsortedArray.push(unsortedArray.length);
+   
     resetCanvas();
     drawGraph();
 }
 
 function createUnsortedArray(size){
     let array = [];
-    for(let i = 0; i<size; i++){
-        array.push(i);
-    }
+    
+
+    /* USING SETS*/
+    while(array.length != size){
+        let num = Math.floor(Math.random()*size+1);
+        array.push(num)
+
+        array.forEach(i=>{
+            array.forEach(j=>{
+                if(i == j){
+                    let set = new Set(array);
+                    array = Array.from(set);
+                }
+            })
+        })
+    }   /**/
     return array;
 }
 
