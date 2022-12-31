@@ -37,13 +37,24 @@ class Column{
 var sideMargin = canvas.width*0.05;
 var topMargin = canvas.height*0.95;
 var bottomMargin = canvas.height*0.02;
-var unsortedArray = createUnsortedArray(10);
+var unsortedArray;
 
-drawCanvasBackground('#EF2D56');
-
-drawGraph();
+start();
 
 //FUNCTIONS
+function start(){
+    unsortedArray = createUnsortedArray(1);    
+    update();
+    return;
+}
+
+function update(){
+    window.requestAnimationFrame(update);
+    unsortedArray.push(unsortedArray.length);
+    resetCanvas();
+    drawGraph();
+}
+
 function createUnsortedArray(size){
     let array = [];
     for(let i = 0; i<size; i++){
@@ -74,6 +85,12 @@ function mapNumberRange(number, fromLow, toLow, fromHigh, toHigh){
     j = toHigh - fromHigh;
 
     return number*j/i+fromHigh;
+}
+
+function resetCanvas(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    drawCanvasBackground('#EF2D56');
+    return;
 }
 
 function drawCanvasBackground(color){
