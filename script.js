@@ -315,42 +315,47 @@ class SelectionSort {
 
 class Input {
     constructor(){
-        let methodElement = document.getElementById('method-select');
-        this.method = methodElement.value; 
+        this.methodElement = document.getElementById('method-select');
+        this.orderElement = document.getElementById('order-select');        
+        this.sizeElement = document.getElementById('size-input');
+        this.sizeRangeElement =  document.getElementById('size-range')
 
-        let orderElement = document.getElementById('order-select');
-        this.order = orderElement.value;
-        
-        let sizeElement = document.getElementById('size-input');
-        this.size = sizeElement.value;
-        let sizeRangeElement =  document.getElementById('size-range')
+        this.method = this.methodElement.value; 
+        this.order = this.orderElement.value;
+        this.size = this.sizeElement.value;
 
-        methodElement.addEventListener('change',()=>{
+        this.methodElement.addEventListener('change',()=>{
             setup();
         })
 
-        orderElement.addEventListener('change',()=>{
+        this.orderElement.addEventListener('change',()=>{
             setup();
         })
 
-        sizeElement.addEventListener('change',()=>{
+        this.sizeElement.addEventListener('change',()=>{
             setup();
         })
 
-        sizeRangeElement.addEventListener('input',()=>{
-            sizeElement.value = sizeRangeElement.value;
+        this.sizeRangeElement.addEventListener('input',()=>{
+            this.sizeElement.value = this.sizeRangeElement.value;
         })
-        sizeRangeElement.addEventListener('change',()=>{
+
+        this.sizeRangeElement.addEventListener('change',()=>{
             setup();
         })
     }
 
+    update(){
+        this.method = this.methodElement.value; 
+        this.order = this.orderElement.value;
+        this.size = this.sizeElement.value;
+    }
 }
 
 //global variables
 const canvas = new Canvas('#05020a');
 const CTX = canvas.context;
-var input;
+var input = new Input();
 var sortSettings;
 var unsortedArray;
 
@@ -364,7 +369,7 @@ start();
 
 //FUNCTIONS
 function setup(){
-    input = new Input();
+    input.update();
     unsortedArray = new uArray(input.size);
     sortSettings = new Settings(input.method, input.order, 0, 3000);
     return;
