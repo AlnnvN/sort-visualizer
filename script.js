@@ -129,7 +129,7 @@ class Column {
         let gapMultiplier = unsortedArray.access.length / (unsortedArray.access.length * 5) ** 2
         this.gap = (canvas.width) * gapMultiplier;
         this.x = xPos;
-        this.color = "#02020A";
+        this.color = "#EFE9E7";
         this.value = value;
         this.width = ((canvas.width - (canvas.sideMargin * 2)) - (this.gap * (unsortedArray.access.length - 1))) / unsortedArray.access.length
         this.height = mapNumberRange(
@@ -308,7 +308,6 @@ class SelectionSort {
         function checkIsSorted() {
             if(self.j >= self.array.length){
                 self.isSorting = false;
-                console.log('finished sorting')
             }
         }
     }
@@ -316,42 +315,61 @@ class SelectionSort {
 
 class Input {
     constructor(){
-        this.method = document.getElementById('method-select').value;
-        this.order = document.getElementById('order-select').value;
+        let methodElement = document.getElementById('method-select');
+        let orderElement = document.getElementById('order-select');
+        this.method = methodElement.value;
+        this.order = orderElement.value;
+
+        methodElement.addEventListener('change',()=>{
+            setup();
+        })
+
+        orderElement.addEventListener('change',()=>{
+            setup();
+        })
     }
 
 }
 
 //global variables
-//02020A
-
-const canvas = new Canvas('#6D435A');
+const canvas = new Canvas('#05020a');
 const CTX = canvas.context;
 var input;
 var sortSettings;
-var unsortedArray = new uArray(1000);
+var unsortedArray;
 
 start();
 
-//FUNCTIONS
-function start() {
+//TODO Reset Function
+//TODO Add another sort method
+//TODO Take size input
+//TODO Take speed input
+//TODO Take sorter quantity input
+//TODO Add colors showing the sorting progress
 
-    updateCanvas();
+//FUNCTIONS
+function setup(){
+    input = new Input();
+    unsortedArray = new uArray(1000);
+    sortSettings = new Settings(input.method, input.order, 0, 3000);
     return;
 }
 
-function updateCanvas() {
+function start() {
+    setup();
+    updateCanvas(); //TODO Add method to canvas class
+    return;
+}
+
+function updateCanvas() { //TODO Add method to canvas class
     window.requestAnimationFrame(updateCanvas);
     canvas.reset();
-    drawGraph();
-    
-    input = new Input();
-    sortSettings = new Settings(input.method, input.order, 0, 3000);
-    
+    drawGraph(); //TODO Add method to column class
+
     return;
 }
 
-function sortArray() {
+function sortArray() { //TODO Add method to array class
     let sortMethod = sortSettings.switchSortMethod();
     var loop = function () { //infinite loop
         let timeout = setTimeout(() => { //delay between operations
@@ -360,7 +378,6 @@ function sortArray() {
                 for (let k = 0; k < sortSettings.quantity; k++) {
                     sortMethod.sort();
                 }
-
             }
             else {
                 //clear set timeouts and return
@@ -399,3 +416,4 @@ function mapNumberRange(number, fromLow, toLow, fromHigh, toHigh) {
 
     return number * j / i + fromHigh;
 }
+
