@@ -47,22 +47,6 @@ class uArray {
             }
         }
 
-        /*USING SETS - complexity directly dependent on Math.random(), 
-        which may generate instances with a overwhelming amount of loops.
-        Usage limited to small array sizes
-        while(array.length != size){
-            let num = Math.floor(Math.random()*size+1);
-            array.push(num)
-    
-            array.forEach(i=>{
-                array.forEach(j=>{
-                    if(i == j){
-                        let set = new Set(array);
-                        array = Array.from(set);
-                    }
-                })
-            })
-        }  */
         return array;
     }
 
@@ -82,7 +66,7 @@ class Canvas {
 
         //inner settings
         this.sideMargin = this.element.width * 0.05;
-        this.topMargin = this.element.height * 0.95;
+        this.topMargin = this.element.height * 0.90;
         this.bottomMargin = this.element.height * 0.02;
 
 
@@ -98,7 +82,7 @@ class Canvas {
 
         function addScreenInput() {
             //click anywhere on the screen to start sorting
-            self.element.addEventListener('click', sortNumberArray);
+            self.element.addEventListener('click', sortArray);
             return;
         }
 
@@ -111,8 +95,8 @@ class Canvas {
 
         function adjustFromPixelRatio() {
             //adjusting W/H proportionally to the pixel ratio with html
-            self.element.width = window.innerWidth * self.ratio;
-            self.element.height = window.innerHeight * self.ratio;
+            self.element.width = window.innerWidth //* self.ratio; //TODO fix pixel adjustment so it can work with bootstrap
+            self.element.height = window.innerHeight //* self.ratio; //TODO fix pixel adjustment so it can work with bootstrap 
             return;
         }
 
@@ -123,7 +107,7 @@ class Canvas {
         let self = this
 
         clearScreen();
-        drawBackground('#EF2D56');
+        drawBackground(this.color);
 
         function clearScreen() {
             self.context.clearRect(0, 0, self.element.width, self.element.height);
@@ -140,10 +124,12 @@ class Canvas {
 }
 
 class Column {
+    //352D39
     constructor(xPos, value) {
         let gapMultiplier = unsortedArray.access.length / (unsortedArray.access.length * 5) ** 2
         this.gap = (canvas.width) * gapMultiplier;
         this.x = xPos;
+        this.color = "#02020A";
         this.value = value;
         this.width = ((canvas.width - (canvas.sideMargin * 2)) - (this.gap * (unsortedArray.access.length - 1))) / unsortedArray.access.length
         this.height = mapNumberRange(
@@ -156,7 +142,7 @@ class Column {
     }
 
     draw() {
-        CTX.fillStyle = "#FFFFFC";
+        CTX.fillStyle = this.color;
         CTX.fillRect(
             this.x,
             (canvas.height - canvas.bottomMargin),
@@ -281,11 +267,7 @@ class SelectionSort {
 
     sortingAlgorithm(sortCondition, checkSortedCondition) {
         let self = this;
-        /*
-        console.log(`isSortedCounter=${this.isSortedCounter}`)
-        console.log(`I=${this.i}`)
-        console.log(`J=${this.j}`)
-*/
+
         checkIsSorted();
         finMinMaxNumber();   
         switchPositions();
@@ -332,10 +314,21 @@ class SelectionSort {
     }
 }
 
+class Input {
+    constructor(){
+        this.method = document.getElementById('method-select').value;
+        this.order = document.getElementById('order-select').value;
+    }
+
+}
+
 //global variables
-const canvas = new Canvas('#EF2D56');
+//02020A
+
+const canvas = new Canvas('#6D435A');
 const CTX = canvas.context;
-const sortSettings = new Settings('bubblesort', 'decreasing', 0, 3000);
+var input;
+var sortSettings;
 var unsortedArray = new uArray(1000);
 
 start();
@@ -351,11 +344,14 @@ function updateCanvas() {
     window.requestAnimationFrame(updateCanvas);
     canvas.reset();
     drawGraph();
-
+    
+    input = new Input();
+    sortSettings = new Settings(input.method, input.order, 0, 3000);
+    
     return;
 }
 
-function sortNumberArray() {
+function sortArray() {
     let sortMethod = sortSettings.switchSortMethod();
     var loop = function () { //infinite loop
         let timeout = setTimeout(() => { //delay between operations

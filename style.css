@@ -1,10 +1,22 @@
 *{
-    margin:0;
-    padding:0;
+    
     overflow: hidden;
 }
 
 body{
-    background-color: #EF2D56;
-    background-color: white;
+    background-color: #6D435A;
 }
+
+#canvas{
+    margin:0;
+    padding:0;
+    position: absolute;
+}
+
+.offcanvas-header{
+    background-color: #05020a;
+}
+.navbar,.offcanvas-body{
+    background-color: #05020ad4;
+}
+

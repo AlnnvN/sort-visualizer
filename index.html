@@ -4,12 +4,53 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
     <title>Sort Visualizer</title>
 </head>
 <body>
     <canvas id="canvas"></canvas>
+    <nav class="navbar navbar-dark fixed-top">
+        <div class="container-fluid d-flex justify-content-end">
+          <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
+            
+            <div class="offcanvas-header">
+              <h2 class="offcanvas-title fw-lighter" id="offcanvasDarkNavbarLabel">Settings</h2>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+
+            <div class="offcanvas-body">
+                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                    <li class="nav-item">
+                        <h5 class="fw-normal" aria-current="page" href="#">Method</h5>
+                        <select name="method-select" id="method-select" class="form-select form-select-lg fs-5 fw-medium pt-3 pb-3">
+                            <option selected value="bubblesort" class="fw-normal fs-5">Bubble Sort</option>
+                            <option value="selectionsort" class="fw-normal fs-5">Selection Sort</option>
+                        </select>
+                    </li>
+                    
+                    <li class="nav-item mt-4" >
+                        <h5 class="fw-normal" aria-current="page" href="#">Order</h5>
+                        <select name="order-select" id="order-select" class="form-select form-select-lg fs-5 fw-medium pt-3 pb-3">
+                            <option selected value="increasing" class="fw-normal fs-5">Increasing</option>
+                            <option value="decreasing" class="fw-normal fs-5">Decreasing</option>
+                        </select>
+                    </li>
+                </ul>
+            </li>
+            </ul>
+        </div>
+        </div>
+    </div>
+    </nav>
+
+    
 </body>
 
 </html>
 <script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
