@@ -323,6 +323,7 @@ class Input {
         
         let sizeElement = document.getElementById('size-input');
         this.size = sizeElement.value;
+        let sizeRangeElement =  document.getElementById('size-range')
 
         methodElement.addEventListener('change',()=>{
             setup();
@@ -333,6 +334,13 @@ class Input {
         })
 
         sizeElement.addEventListener('change',()=>{
+            setup();
+        })
+
+        sizeRangeElement.addEventListener('input',()=>{
+            sizeElement.value = sizeRangeElement.value;
+        })
+        sizeRangeElement.addEventListener('change',()=>{
             setup();
         })
     }
