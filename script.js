@@ -316,15 +316,23 @@ class SelectionSort {
 class Input {
     constructor(){
         let methodElement = document.getElementById('method-select');
+        this.method = methodElement.value; 
+
         let orderElement = document.getElementById('order-select');
-        this.method = methodElement.value;
         this.order = orderElement.value;
+        
+        let sizeElement = document.getElementById('size-input');
+        this.size = sizeElement.value;
 
         methodElement.addEventListener('change',()=>{
             setup();
         })
 
         orderElement.addEventListener('change',()=>{
+            setup();
+        })
+
+        sizeElement.addEventListener('change',()=>{
             setup();
         })
     }
@@ -340,7 +348,6 @@ var unsortedArray;
 
 start();
 
-//TODO Reset Function
 //TODO Add another sort method
 //TODO Take size input
 //TODO Take speed input
@@ -350,7 +357,7 @@ start();
 //FUNCTIONS
 function setup(){
     input = new Input();
-    unsortedArray = new uArray(1000);
+    unsortedArray = new uArray(input.size);
     sortSettings = new Settings(input.method, input.order, 0, 3000);
     return;
 }
