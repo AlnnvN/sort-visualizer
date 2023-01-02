@@ -405,9 +405,8 @@ var isSorting = false;
 
 start();
 
+//TODO Fix pixelrate for mobile resolutions
 //TODO Add colors showing the sorting progress
-//TODO Fix possibility to call sortArray() many times - Canvas eventListener 
-
 
 //FUNCTIONS
 function setup(){
