@@ -82,7 +82,11 @@ class Canvas {
 
         function addScreenInput() {
             //click anywhere on the screen to start sorting
-            self.element.addEventListener('click', sortArray);
+            self.element.addEventListener('click', ()=>{
+                if(!isSorting){
+                    sortArray()
+                }
+            }); 
             return;
         }
 
@@ -170,7 +174,7 @@ class BubbleSort {
         this.order = order
         this.i = 0;
         this.isSortedCounter = 0;
-        this.isSorting = true;
+        isSorting = true;
         this.array = array;
     }
 
@@ -209,7 +213,7 @@ class BubbleSort {
 
         //check if its sorted
         if (this.isSortedCounter >= this.array.length) {
-            this.isSorting = false;
+            isSorting = false;
         }
 
         this.i++; //next index
@@ -226,7 +230,7 @@ class SelectionSort {
         this.array = array;
         this.order = order
         this.isSortedCounter = 1;
-        this.isSorting = true;
+        isSorting = true;
 
         this.minMax = {
             value: this.array[0],
@@ -307,7 +311,7 @@ class SelectionSort {
 
         function checkIsSorted() {
             if(self.j >= self.array.length){
-                self.isSorting = false;
+                isSorting = false;
             }
         }
     }
@@ -397,13 +401,13 @@ const CTX = canvas.context;
 var input = new Input();
 var sortSettings;
 var unsortedArray;
-
+var isSorting = false;
 
 start();
 
 //TODO Add colors showing the sorting progress
 //TODO Fix possibility to call sortArray() many times - Canvas eventListener 
-//TODO Create a reset button
+
 
 //FUNCTIONS
 function setup(){
@@ -432,7 +436,7 @@ function sortArray() { //TODO Add method to array class
 
     var loop = function () { //infinite loop
         let timeout = setTimeout(() => { //delay between operations
-            if (sortMethod.isSorting) {
+            if (isSorting) {
                 //define comparisons per operation
                 for (let k = 0; k < sortSettings.quantity; k++) {
                     sortMethod.sort();
@@ -448,7 +452,7 @@ function sortArray() { //TODO Add method to array class
         }, input.delay); //delay value
     }
 
-    if (sortMethod.isSorting) {
+    if (isSorting) {
         window.requestAnimationFrame(loop);
     }
 
