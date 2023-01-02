@@ -1,8 +1,8 @@
 class Settings {
-    constructor(method, order, speed, quantity) {
+    constructor(method, order, delay, quantity) {
         this.method = method;
         this.order = order;
-        this.speed = speed;
+        this.delay = delay;
         this.quantity = quantity;
     }
 
@@ -319,11 +319,15 @@ class Input {
         this.orderElement = document.getElementById('order-select');        
         this.sizeElement = document.getElementById('size-input');
         this.sizeRangeElement =  document.getElementById('size-range')
+        this.delayElement = document.getElementById('delay-input');
+        this.delayRangeElement = document.getElementById('delay-range');
+
 
         this.method = this.methodElement.value; 
         this.order = this.orderElement.value;
         this.size = this.sizeElement.value;
-
+        this.delay = this.delayElement.value;
+        
         this.methodElement.addEventListener('change',()=>{
             setup();
         })
@@ -339,16 +343,28 @@ class Input {
         this.sizeRangeElement.addEventListener('input',()=>{
             this.sizeElement.value = this.sizeRangeElement.value;
         })
-
         this.sizeRangeElement.addEventListener('change',()=>{
             setup();
         })
+
+        this.delayElement.addEventListener('change',()=>{
+            setup();
+        })
+
+        this.delayRangeElement.addEventListener('input',()=>{
+            this.delayElement.value = this.delayRangeElement.value;
+        })
+        this.delayRangeElement.addEventListener('change',()=>{
+            setup();
+        })
+
     }
 
     update(){
         this.method = this.methodElement.value; 
         this.order = this.orderElement.value;
         this.size = this.sizeElement.value;
+        this.delay = this.delayElement.value;
     }
 }
 
@@ -359,10 +375,11 @@ var input = new Input();
 var sortSettings;
 var unsortedArray;
 
+
 start();
 
 //TODO Add another sort method
-//TODO Take size input
+
 //TODO Take speed input
 //TODO Take sorter quantity input
 //TODO Add colors showing the sorting progress
@@ -371,7 +388,7 @@ start();
 function setup(){
     input.update();
     unsortedArray = new uArray(input.size);
-    sortSettings = new Settings(input.method, input.order, 0, 3000);
+    sortSettings = new Settings(input.method, input.order, 0, 1);
     return;
 }
 
@@ -390,7 +407,9 @@ function updateCanvas() { //TODO Add method to canvas class
 }
 
 function sortArray() { //TODO Add method to array class
+   
     let sortMethod = sortSettings.switchSortMethod();
+    console.log('starting loop')
     var loop = function () { //infinite loop
         let timeout = setTimeout(() => { //delay between operations
             if (sortMethod.isSorting) {
@@ -406,7 +425,7 @@ function sortArray() { //TODO Add method to array class
             }
             //mantain loop if it doesn't return
             window.requestAnimationFrame(loop);
-        }, sortSettings.speed); //delay value
+        }, input.delay); //delay value
     }
 
     if (sortMethod.isSorting) {
