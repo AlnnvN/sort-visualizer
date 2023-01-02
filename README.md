@@ -1,5 +1,5 @@
 # sort-visualizer
-A column visualizer for different sorting methods
+A customizable and dynamic column visualizer for different sorting methods
 
 https://alnnvn.github.io/sort-visualizer/
 
