@@ -66,7 +66,7 @@ class Canvas {
 
         //inner settings
         this.sideMargin = this.element.width * 0.05;
-        this.topMargin = this.element.height * 0.90;
+        this.topMargin = this.element.height * 0.85;
         this.bottomMargin = this.element.height * 0.02;
 
 
@@ -323,12 +323,15 @@ class Input {
         this.delayRangeElement = document.getElementById('delay-range');
         this.quantityElement = document.getElementById('qnt-input');
         this.quantityRangeElement = document.getElementById('qnt-range');
+        this.resetBtn = document.getElementById('reset-btn');
 
         this.method = this.methodElement.value; 
         this.order = this.orderElement.value;
         this.size = this.sizeElement.value;
         this.delay = this.delayElement.value;
         this.quantity = this.quantityElement.value;
+
+        
 
         //method
         this.methodElement.addEventListener('change',()=>{
@@ -373,6 +376,10 @@ class Input {
             setup();
         })
 
+        //reset button
+        this.resetBtn.addEventListener('click',()=>{
+            setup();
+        })
     }
 
     update(){
@@ -394,8 +401,6 @@ var unsortedArray;
 
 start();
 
-//TODO Add another sort method
-//TODO Take sorter quantity input
 //TODO Add colors showing the sorting progress
 //TODO Fix possibility to call sortArray() many times - Canvas eventListener 
 //TODO Create a reset button
@@ -423,9 +428,8 @@ function updateCanvas() { //TODO Add method to canvas class
 }
 
 function sortArray() { //TODO Add method to array class
-   
     let sortMethod = sortSettings.switchSortMethod();
-    console.log('starting loop')
+
     var loop = function () { //infinite loop
         let timeout = setTimeout(() => { //delay between operations
             if (sortMethod.isSorting) {

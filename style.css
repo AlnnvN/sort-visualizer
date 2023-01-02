@@ -7,6 +7,7 @@ body{
 }
 
 #canvas{
+    z-index: -1;
     margin:0;
     padding:0;
     position: absolute;
@@ -24,3 +25,18 @@ body{
     padding-bottom: 0.25vh;
 }
 
+.navbar-toggler{
+    border: none;
+}
+.navbar-toggler-icon{
+    width: 40px;
+    height: 40px;
+}
+
+#click-screen-text{
+    padding-bottom: 10px;
+    font-weight: lighter;
+    font-size:1rem;
+    z-index: 1;
+    margin-top: 7vh;
+}

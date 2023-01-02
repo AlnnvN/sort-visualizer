@@ -11,14 +11,18 @@
 <body>
     <canvas id="canvas"></canvas>
     <nav class="navbar navbar-dark fixed-top">
-        <div class="container-fluid d-flex justify-content-between">
+        <div class="container-fluid d-flex justify-content-evenly">
             
-            <h1 class="navbar-brand ms-3 mt-1 display-3">Sort Visualizer</h1>
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar">
-            <span class="navbar-toggler-icon"></span>
+            <button id='reset-btn' class="btn" type="button">
+                <img src="src/icons8-update-left-rotation-96.png" alt="" width="40px" height="40px">
             </button>
 
+            <h1 class="mt-1 display-5 fs-2 text-light">Sort Visualizer</h1>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
             <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
             
             <div class="offcanvas-header">
@@ -27,6 +31,9 @@
             </div>
 
             <div class="offcanvas-body">
+                <h5 class="fw-normal text-center mt-2 mb-3 pb-4" aria-current="page" href="#">
+                    Click the graph to start sorting
+                </h5>
                 <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                     <li class="nav-item">
                         <h5 class="fw-normal" aria-current="page" href="#">
@@ -53,13 +60,13 @@
                             Array Size
                         </h5>
                         <div class="container d-flex m-0 ps-0 pe-0 mt-0">
-                            <input type="number" class="form-control form-select-lg fs-5 fw-medium pt-3 pb-3 mt-0" id="size-input" value="100">
+                            <input type="number" class="form-control form-select-lg fs-5 fw-medium pt-3 pb-3 mt-0" id="size-input" value="1000">
                             <button class="btn btn-light ms-4 mt-3 mb-2 fs-4 fw-medium d-flex justify-content-center btn-more" data-bs-toggle="collapse" data-bs-target="#size-range-div" aria-expanded="false" aria-controls="size-range-div">
                                 +
                             </button>
                         </div>
                         <div class="m-0 mt-4 collapse" id="size-range-div">
-                            <input type="range" class="form-range" name="size-range" id="size-range" value="100" min="10" max="1000">
+                            <input type="range" class="form-range" name="size-range" id="size-range" value="1000" min="10" max="1000">
                         </div>
                     </li>
    
@@ -68,13 +75,13 @@
                             Operation Delay (ms)
                         </h5>
                         <div class="container d-flex m-0 ps-0 pe-0 mt-0">
-                            <input type="number" class="form-control form-select-lg fs-5 fw-medium pt-3 pb-3 mt-0" id="delay-input" value="500">
+                            <input type="number" class="form-control form-select-lg fs-5 fw-medium pt-3 pb-3 mt-0" id="delay-input" value="20">
                             <button class="btn btn-light ms-4 mt-3 mb-2 fs-4 fw-medium d-flex justify-content-center btn-more" data-bs-toggle="collapse" data-bs-target="#delay-range-div" aria-expanded="false" aria-controls="delay-range-div">
                                 +
                             </button>
                         </div>
                         <div class="m-0 mt-4 collapse" id="delay-range-div">
-                            <input type="range" class="form-range" name="delay-range" id="delay-range" value="500" min="0" max="1000">
+                            <input type="range" class="form-range" name="delay-range" id="delay-range" value="20" min="0" max="1000">
                         </div>
                     </li>
 
@@ -83,13 +90,13 @@
                             Comparisons per Operation 
                         </h5>
                         <div class="container d-flex m-0 ps-0 pe-0 mt-0">
-                            <input type="number" class="form-control form-select-lg fs-5 fw-medium pt-3 pb-3 mt-0" id="qnt-input" value="2">
+                            <input type="number" class="form-control form-select-lg fs-5 fw-medium pt-3 pb-3 mt-0" id="qnt-input" value="5000">
                             <button class="btn btn-light ms-4 mt-3 mb-2 fs-4 fw-medium d-flex justify-content-center btn-more" data-bs-toggle="collapse" data-bs-target="#qnt-range-div" aria-expanded="false" aria-controls="qnt-range-div">
                                 +
                             </button>
                         </div>
                         <div class="m-0 mt-4 collapse" id="qnt-range-div">
-                            <input type="range" class="form-range" name="qnt-range" id="qnt-range" value="2" min="0" max="5000">
+                            <input type="range" class="form-range" name="qnt-range" id="qnt-range" value="5000" min="1" max="5000">
                         </div>
                     </li>
                        
@@ -101,7 +108,8 @@
         </div>
     </div>
     </nav>
-
+ 
+              
     
 </body>
 
