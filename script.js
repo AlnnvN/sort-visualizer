@@ -2,8 +2,8 @@ class Settings {
     constructor(method, order, delay, quantity) {
         this.method = method;
         this.order = order;
-        this.delay = delay;
-        this.quantity = quantity;
+        this.delay = delay; //delay between operations
+        this.quantity = quantity; //comparisons per operation
     }
 
     switchSortMethod() {
@@ -321,25 +321,29 @@ class Input {
         this.sizeRangeElement =  document.getElementById('size-range')
         this.delayElement = document.getElementById('delay-input');
         this.delayRangeElement = document.getElementById('delay-range');
-
+        this.quantityElement = document.getElementById('qnt-input');
+        this.quantityRangeElement = document.getElementById('qnt-range');
 
         this.method = this.methodElement.value; 
         this.order = this.orderElement.value;
         this.size = this.sizeElement.value;
         this.delay = this.delayElement.value;
-        
+        this.quantity = this.quantityElement.value;
+
+        //method
         this.methodElement.addEventListener('change',()=>{
             setup();
         })
 
+        //order
         this.orderElement.addEventListener('change',()=>{
             setup();
         })
 
+        //size
         this.sizeElement.addEventListener('change',()=>{
             setup();
         })
-
         this.sizeRangeElement.addEventListener('input',()=>{
             this.sizeElement.value = this.sizeRangeElement.value;
         })
@@ -347,14 +351,25 @@ class Input {
             setup();
         })
 
+        //delay
         this.delayElement.addEventListener('change',()=>{
             setup();
         })
-
         this.delayRangeElement.addEventListener('input',()=>{
             this.delayElement.value = this.delayRangeElement.value;
         })
         this.delayRangeElement.addEventListener('change',()=>{
+            setup();
+        })
+
+        //quantity
+        this.quantityElement.addEventListener('change',()=>{
+            setup();
+        })
+        this.quantityRangeElement.addEventListener('input',()=>{
+            this.quantityElement.value = this.quantityRangeElement.value;
+        })
+        this.quantityRangeElement.addEventListener('change',()=>{
             setup();
         })
 
@@ -365,6 +380,7 @@ class Input {
         this.order = this.orderElement.value;
         this.size = this.sizeElement.value;
         this.delay = this.delayElement.value;
+        this.quantity = this.quantityElement.value;
     }
 }
 
@@ -379,16 +395,16 @@ var unsortedArray;
 start();
 
 //TODO Add another sort method
-
-//TODO Take speed input
 //TODO Take sorter quantity input
 //TODO Add colors showing the sorting progress
+//TODO Fix possibility to call sortArray() many times - Canvas eventListener 
+//TODO Create a reset button
 
 //FUNCTIONS
 function setup(){
     input.update();
     unsortedArray = new uArray(input.size);
-    sortSettings = new Settings(input.method, input.order, 0, 1);
+    sortSettings = new Settings(input.method, input.order, input.delay, input.quantity);
     return;
 }
 
