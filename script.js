@@ -6,23 +6,21 @@ class Settings {
         this.quantity = quantity; //comparisons per operation
     }
 
-    switchSortMethod() {
+    getSortMethod() {
+        
         if (this.method === 'bubblesort') {
-            return new BubbleSort(this.order, graph.array.access);
+           
+            return new BubbleSort(this.order, graph.array);
         }
         else if (this.method === 'selectionsort') {
-            return new SelectionSort(this.order, graph.array.access);
+            return new SelectionSort(this.order, graph.array);
         }
 
     }
 }
 
 class uArray {
-    constructor(size) {
-        this.size = size;
-        this.access = uArray.createUnsortedArray(this.size)
-    }
-    
+
     static createUnsortedArray(size) {
         let array = [];
 
@@ -126,26 +124,25 @@ class Canvas {
 
 class Column {
     //352D39
-    constructor(xPos, value) {
-        let gapMultiplier = graph.array.access.length / (graph.array.access.length * 5) ** 2
+    constructor(value) {
+        let gapMultiplier = input.size / (input.size * 5) ** 2
         this.gap = (canvas.width) * gapMultiplier;
-        this.x = xPos;
         this.color = "#EFE9E7";
         this.value = value;
-        this.width = ((canvas.width - (canvas.sideMargin * 2)) - (this.gap * (graph.array.access.length - 1))) / graph.array.access.length
+        this.width = ((canvas.width - (canvas.sideMargin * 2)) - (this.gap * (input.size - 1))) / input.size
         this.height = mapNumberRange(
             value,
             0,
-            graph.array.access.length,
+            input.size,
             canvas.height * 0.15, //min column height
             canvas.topMargin //max column height
         );
     }
 
-    draw() {
+    draw(x) {
         CTX.fillStyle = this.color;
         CTX.fillRect(
-            this.x,
+            x,
             (canvas.height - canvas.bottomMargin),
             this.width,
             -this.height
@@ -167,11 +164,11 @@ class Column {
 }
 
 class Graph {
-    constructor(size){
+    constructor(size) {
         this.size = size;
-        this.array = new uArray(this.size);
+        this.array = this.createColumnArray(this.size);
         this.colors = {
-            default:"#EFE9E7",
+            default: "#EFE9E7",
             unsorted: "red",
             sorted: "green",
             current: "blue",
@@ -179,15 +176,21 @@ class Graph {
         };
     }
 
-   draw() {
-        for (let i = 0; i < this.array.access.length; i++) {
-            let column = new Column(
-                canvas.width * 0.05 + (Column.getWidth() + Column.getGap()) * i,
-                this.array.access[i]
-            );
-            column.draw()
-        }
+    draw() {
+        this.array.forEach((column, index) => {
+            column.draw(canvas.width * 0.05 + (Column.getWidth() + Column.getGap()) * index);
+        })
         return;
+    }
+
+    createColumnArray(size) {
+        let array = [];
+        let numbers = uArray.createUnsortedArray(size);
+
+        numbers.forEach(number => {
+            array.push(new Column(number));
+        })
+        return array;
     }
 }
 
@@ -198,6 +201,7 @@ class BubbleSort {
         this.isSortedCounter = 0;
         isSorting = true;
         this.array = array;
+
     }
 
     sort() {
@@ -212,21 +216,22 @@ class BubbleSort {
     }
 
     increasing() {
-        this.sortingAlgorithm(this.array[this.i] > this.array[this.i + 1]);
+        this.sortingAlgorithm(this.array[this.i].value > this.array[this.i + 1].value);
         return;
     }
 
     decreasing() {
-        this.sortingAlgorithm(this.array[this.i] < this.array[this.i + 1]);
+        this.sortingAlgorithm(this.array[this.i].value < this.array[this.i + 1].value);
         return;
     }
 
     sortingAlgorithm(sortCondition) {
-
+        //switch places
         if (sortCondition) {
-            let c = this.array[this.i];
-            this.array[this.i] = this.array[this.i + 1];
-            this.array[this.i + 1] = c;
+            [this.array[this.i],
+            this.array[this.i + 1]] = [this.array[this.i + 1],
+            this.array[this.i]]
+
             this.isSortedCounter = 0;
         }
         else {
@@ -234,14 +239,15 @@ class BubbleSort {
         }
 
         //check if its sorted
-        if (this.isSortedCounter >= this.array.length) {
+        if (this.isSortedCounter >= graph.size) {
+            console.log('trigger')
             isSorting = false;
         }
 
         this.i++; //next index
 
         //if loop through the array back from the start
-        if (this.i >= this.array.length - 1) {
+        if (this.i >= graph.size - 1) {
             this.i = 0;
         }
     }
@@ -277,7 +283,7 @@ class SelectionSort {
 
     increasing() {
         this.sortingAlgorithm(
-            this.array[this.i] < this.minMax.value,
+            this.array[this.i].value < this.minMax.value,
             this.array[this.k] < this.array[this.k + 1]
         );
         return;
@@ -285,7 +291,7 @@ class SelectionSort {
 
     decreasing() {
         this.sortingAlgorithm(
-            this.array[this.i] > this.minMax.value,
+            this.array[this.i].value > this.minMax.value,
             this.array[this.k] > this.array[this.k + 1]
         );
         return;
@@ -425,8 +431,6 @@ var input = new Input();
 var sortSettings;
 var graph;
 
-
-//var graph.array;
 var isSorting = false;
 
 start();
@@ -453,13 +457,13 @@ function start() {
 function updateCanvas() { //TODO Add method to canvas class
     window.requestAnimationFrame(updateCanvas);
     canvas.reset();
-    drawGraph(); //TODO Add method to column class
+    graph.draw(); //TODO Add method to column class
 
     return;
 }
 
 function sortArray() { //TODO Add method to array class
-    let sortMethod = sortSettings.switchSortMethod();
+    let sortMethod = sortSettings.getSortMethod();
 
     var loop = function () { //infinite loop
         let timeout = setTimeout(() => { //delay between operations
@@ -483,18 +487,6 @@ function sortArray() { //TODO Add method to array class
         window.requestAnimationFrame(loop);
     }
 
-    return;
-}
-
-function drawGraph() {
-    for (let i = 0; i < graph.array.access.length; i++) {
-        let column = new Column(
-            canvas.width * 0.05 + (Column.getWidth() + Column.getGap()) * i,
-            graph.array.access[i]
-        );
-        column.draw()
-
-    }
     return;
 }
 
