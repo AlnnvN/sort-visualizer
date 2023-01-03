@@ -233,20 +233,26 @@ class BubbleSort {
                 this.array[this.i-1].color = graph.colors.default;
                 this.array[this.i].color = graph.colors.default;
             }
-            this.array[this.i].color = graph.colors.current;
-            this.array[this.i+1].color = graph.colors.comparison;
         }
         
-
         //switch places
         if (sortCondition) {
             [this.array[this.i],
             this.array[this.i + 1]] = [this.array[this.i + 1],
             this.array[this.i]]
+            if(sortSettings.showColors){
+                this.array[this.i].color = graph.colors.current;
+                this.array[this.i+1].color = graph.colors.comparison;
+            }
+            
 
             this.isSortedCounter = 0;
         }
         else {
+            if(sortSettings.showColors){
+                this.array[this.i].color = 'green';
+                this.array[this.i+1].color = 'green';
+            }
             this.isSortedCounter++
         }
 
@@ -259,10 +265,8 @@ class BubbleSort {
             isSorting = false;
         }
 
-
-        
-
         this.i++; //next index
+       
         //if loop through the array back from the start
         if (this.i >= graph.size - 1) {
             if(sortSettings.showColors){
