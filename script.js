@@ -7,9 +7,9 @@ class Settings {
     }
 
     getSortMethod() {
-        
+
         if (this.method === 'bubblesort') {
-           
+
             return new BubbleSort(this.order, graph.array);
         }
         else if (this.method === 'selectionsort') {
@@ -240,7 +240,6 @@ class BubbleSort {
 
         //check if its sorted
         if (this.isSortedCounter >= graph.size) {
-            console.log('trigger')
             isSorting = false;
         }
 
@@ -261,7 +260,7 @@ class SelectionSort {
         isSorting = true;
 
         this.minMax = {
-            value: this.array[0],
+            value: this.array[0].value,
             index: 0
         }
 
@@ -283,43 +282,43 @@ class SelectionSort {
 
     increasing() {
         this.sortingAlgorithm(
-            this.array[this.i].value < this.minMax.value,
-            this.array[this.k] < this.array[this.k + 1]
+            this.array[this.i].value < this.minMax.value
         );
         return;
     }
 
     decreasing() {
         this.sortingAlgorithm(
-            this.array[this.i].value > this.minMax.value,
-            this.array[this.k] > this.array[this.k + 1]
+            this.array[this.i].value > this.minMax.value
         );
         return;
     }
 
-    sortingAlgorithm(sortCondition, checkSortedCondition) {
+    sortingAlgorithm(sortCondition) {
         let self = this;
 
-        checkIsSorted();
-        finMinMaxNumber();
-        switchPositions();
-
-
+        if(isSorting){
+            finMinMaxNumber();
+            switchPositions();
+            checkIsSorted();
+        }
+        
         //functions
         function switchPositions() {
-            if (self.i >= self.array.length - 1 && self.j < self.array.length) {
+            if (self.i >= graph.size - 1 && self.j < graph.size) {
 
                 //loop i through the array back from the last switched position
                 self.i = self.j + 1;
 
                 //switching positions
-                let c = self.array[self.j];
-                self.array[self.j] = self.array[self.minMax.index];
-                self.array[self.minMax.index] = c;
+                [self.array[self.j],
+                self.array[self.minMax.index]] = [self.array[self.minMax.index],
+                self.array[self.j]]
 
                 //preparing for next loop
                 self.j++;
-                self.minMax.value = self.array[self.j];
+                console.log(self.j)
+                self.minMax.value = self.array[self.j].value;
                 self.minMax.index = self.j;
             }
             else {
@@ -332,14 +331,16 @@ class SelectionSort {
 
         function finMinMaxNumber() {
             if (sortCondition) {
-                self.minMax.value = self.array[self.i];
+                self.minMax.value = self.array[self.i].value;
                 self.minMax.index = self.i;
             }
         }
 
         function checkIsSorted() {
-            if (self.j >= self.array.length) {
+            if (self.j >= graph.size-1) {
+                console.log('ACABOU PORRA CARALHO')
                 isSorting = false;
+                
             }
         }
     }
