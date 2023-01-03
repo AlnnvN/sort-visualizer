@@ -1,7 +1,8 @@
 class Settings {
-    constructor(method, order, delay, quantity) {
+    constructor(method='selectionsort', order='increasing', delay='0', quantity='1', size='25') {
         this.method = method;
         this.order = order;
+        this.size = size;
         this.delay = delay; //delay between operations
         this.quantity = quantity; //comparisons per operation
         this.showColors = true;
@@ -119,6 +120,13 @@ class Canvas {
             return;
         }
 
+        return;
+    }
+
+    updateLoop() {
+        window.requestAnimationFrame(canvas.updateLoop);
+        canvas.reset();
+        graph.draw();
         return;
     }
 }
@@ -325,7 +333,14 @@ class SelectionSort {
         let self = this;
 
         if(isSorting){
-            finMinMaxNumber();
+            if(sortSettings.showColors){
+                if(this.i>0){
+                    this.array[this.i-1].color = graph.colors.default;
+                    this.array[this.minMax.index].color = graph.colors.default;
+                }
+            }
+
+            findMinMaxNumber();
             switchPositions();
             checkIsSorted();
         }
@@ -333,7 +348,7 @@ class SelectionSort {
         //functions
         function switchPositions() {
             if (self.i >= graph.size - 1 && self.j < graph.size) {
-
+                if(sortSettings.showColors){self.array[self.i].color = graph.colors.default}
                 //loop i through the array back from the last switched position
                 self.i = self.j + 1;
 
@@ -343,8 +358,9 @@ class SelectionSort {
                 self.array[self.j]]
 
                 //preparing for next loop
+                if(sortSettings.showColors){self.array[self.j].color = graph.colors.sorted}
                 self.j++;
-                console.log(self.j)
+                
                 self.minMax.value = self.array[self.j].value;
                 self.minMax.index = self.j;
             }
@@ -356,16 +372,22 @@ class SelectionSort {
             return;
         }
 
-        function finMinMaxNumber() {
+        function findMinMaxNumber() {
             if (sortCondition) {
                 self.minMax.value = self.array[self.i].value;
                 self.minMax.index = self.i;
+                
+                
+            }
+            if(sortSettings.showColors){
+                self.array[self.minMax.index].color = graph.colors.comparison;
+                self.array[self.i].color = graph.colors.current;    
             }
         }
 
         function checkIsSorted() {
             if (self.j >= graph.size-1) {
-                console.log('ACABOU PORRA CARALHO')
+                self.array[self.j-1].color = graph.colors.default;
                 isSorting = false;
                 
             }
@@ -449,19 +471,27 @@ class Input {
         this.delay = this.delayElement.value;
         this.quantity = this.quantityElement.value;
     }
+
+    setup() {
+        this.methodElement.value = sortSettings.method;
+        this.orderElement.value = sortSettings.order;
+        this.sizeElement.value = sortSettings.size;
+        this.delayElement.value = sortSettings.delay;
+        this.quantityElement.value = sortSettings.quantity;
+    }
 }
 
 //global variables
 const canvas = new Canvas('#05020a');
 const CTX = canvas.context;
 var input = new Input();
-var sortSettings;
+var sortSettings = new Settings();
+input.setup();
 var graph;
 var isSorting;
 
 start();
 
-//TODO Fix pixelrate for mobile resolutions
 //TODO Add colors showing the sorting progress
 
 //FUNCTIONS
@@ -470,22 +500,14 @@ function setup() {
     input.update();
 
     //graph.array = new uArray(input.size);
-    graph = new Graph(input.size);
-    sortSettings = new Settings(input.method, input.order, input.delay, input.quantity);
+    sortSettings = new Settings(input.method, input.order, input.delay, input.quantity, input.size);
+    graph = new Graph(sortSettings.size);
     return;
 }
 
 function start() {
     setup();
-    updateCanvas(); //TODO Add method to canvas class
-    return;
-}
-
-function updateCanvas() { //TODO Add method to canvas class
-    window.requestAnimationFrame(updateCanvas);
-    canvas.reset();
-    graph.draw(); //TODO Add method to column class
-
+    canvas.updateLoop(); 
     return;
 }
 
