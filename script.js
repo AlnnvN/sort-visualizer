@@ -4,6 +4,7 @@ class Settings {
         this.order = order;
         this.delay = delay; //delay between operations
         this.quantity = quantity; //comparisons per operation
+        this.showColors = true;
     }
 
     getSortMethod() {
@@ -226,6 +227,17 @@ class BubbleSort {
     }
 
     sortingAlgorithm(sortCondition) {
+
+        if(sortSettings.showColors){
+            if(this.i>0){
+                this.array[this.i-1].color = graph.colors.default;
+                this.array[this.i].color = graph.colors.default;
+            }
+            this.array[this.i].color = graph.colors.current;
+            this.array[this.i+1].color = graph.colors.comparison;
+        }
+        
+
         //switch places
         if (sortCondition) {
             [this.array[this.i],
@@ -240,15 +252,26 @@ class BubbleSort {
 
         //check if its sorted
         if (this.isSortedCounter >= graph.size) {
+            if(sortSettings.showColors){
+                this.array[this.i].color = graph.colors.default;
+                this.array[this.i+1].color = graph.colors.default;
+            }
             isSorting = false;
         }
 
-        this.i++; //next index
 
+        
+
+        this.i++; //next index
         //if loop through the array back from the start
         if (this.i >= graph.size - 1) {
+            if(sortSettings.showColors){
+                this.array[this.i-1].color = graph.colors.default;
+                this.array[this.i].color = graph.colors.default;
+            }
             this.i = 0;
         }
+        
     }
 }
 
@@ -428,11 +451,9 @@ class Input {
 const canvas = new Canvas('#05020a');
 const CTX = canvas.context;
 var input = new Input();
-
 var sortSettings;
 var graph;
-
-var isSorting = false;
+var isSorting;
 
 start();
 
@@ -441,6 +462,7 @@ start();
 
 //FUNCTIONS
 function setup() {
+    isSorting = false;
     input.update();
 
     //graph.array = new uArray(input.size);
