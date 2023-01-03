@@ -8,10 +8,10 @@ class Settings {
 
     switchSortMethod() {
         if (this.method === 'bubblesort') {
-            return new BubbleSort(this.order, unsortedArray.access);
+            return new BubbleSort(this.order, graph.array.access);
         }
         else if (this.method === 'selectionsort') {
-            return new SelectionSort(this.order, unsortedArray.access);
+            return new SelectionSort(this.order, graph.array.access);
         }
 
     }
@@ -21,9 +21,8 @@ class uArray {
     constructor(size) {
         this.size = size;
         this.access = uArray.createUnsortedArray(this.size)
-
     }
-
+    
     static createUnsortedArray(size) {
         let array = [];
 
@@ -49,8 +48,6 @@ class uArray {
 
         return array;
     }
-
-
 }
 
 class Canvas {
@@ -82,11 +79,11 @@ class Canvas {
 
         function addScreenInput() {
             //click anywhere on the screen to start sorting
-            self.element.addEventListener('click', ()=>{
-                if(!isSorting){
+            self.element.addEventListener('click', () => {
+                if (!isSorting) {
                     sortArray()
                 }
-            }); 
+            });
             return;
         }
 
@@ -130,16 +127,16 @@ class Canvas {
 class Column {
     //352D39
     constructor(xPos, value) {
-        let gapMultiplier = unsortedArray.access.length / (unsortedArray.access.length * 5) ** 2
+        let gapMultiplier = graph.array.access.length / (graph.array.access.length * 5) ** 2
         this.gap = (canvas.width) * gapMultiplier;
         this.x = xPos;
         this.color = "#EFE9E7";
         this.value = value;
-        this.width = ((canvas.width - (canvas.sideMargin * 2)) - (this.gap * (unsortedArray.access.length - 1))) / unsortedArray.access.length
+        this.width = ((canvas.width - (canvas.sideMargin * 2)) - (this.gap * (graph.array.access.length - 1))) / graph.array.access.length
         this.height = mapNumberRange(
             value,
             0,
-            unsortedArray.access.length,
+            graph.array.access.length,
             canvas.height * 0.15, //min column height
             canvas.topMargin //max column height
         );
@@ -166,6 +163,31 @@ class Column {
 
     static getHeight() {
         return new Column().height;
+    }
+}
+
+class Graph {
+    constructor(size){
+        this.size = size;
+        this.array = new uArray(this.size);
+        this.colors = {
+            default:"#EFE9E7",
+            unsorted: "red",
+            sorted: "green",
+            current: "blue",
+            comparison: "purple"
+        };
+    }
+
+   draw() {
+        for (let i = 0; i < this.array.access.length; i++) {
+            let column = new Column(
+                canvas.width * 0.05 + (Column.getWidth() + Column.getGap()) * i,
+                this.array.access[i]
+            );
+            column.draw()
+        }
+        return;
     }
 }
 
@@ -273,14 +295,14 @@ class SelectionSort {
         let self = this;
 
         checkIsSorted();
-        finMinMaxNumber();   
+        finMinMaxNumber();
         switchPositions();
-        
+
 
         //functions
         function switchPositions() {
             if (self.i >= self.array.length - 1 && self.j < self.array.length) {
-        
+
                 //loop i through the array back from the last switched position
                 self.i = self.j + 1;
 
@@ -294,9 +316,9 @@ class SelectionSort {
                 self.minMax.value = self.array[self.j];
                 self.minMax.index = self.j;
             }
-            else{
+            else {
                 //next index
-                self.i++; 
+                self.i++;
                 return;
             }
             return;
@@ -310,7 +332,7 @@ class SelectionSort {
         }
 
         function checkIsSorted() {
-            if(self.j >= self.array.length){
+            if (self.j >= self.array.length) {
                 isSorting = false;
             }
         }
@@ -318,76 +340,76 @@ class SelectionSort {
 }
 
 class Input {
-    constructor(){
+    constructor() {
         this.methodElement = document.getElementById('method-select');
-        this.orderElement = document.getElementById('order-select');        
+        this.orderElement = document.getElementById('order-select');
         this.sizeElement = document.getElementById('size-input');
-        this.sizeRangeElement =  document.getElementById('size-range')
+        this.sizeRangeElement = document.getElementById('size-range')
         this.delayElement = document.getElementById('delay-input');
         this.delayRangeElement = document.getElementById('delay-range');
         this.quantityElement = document.getElementById('qnt-input');
         this.quantityRangeElement = document.getElementById('qnt-range');
         this.resetBtn = document.getElementById('reset-btn');
 
-        this.method = this.methodElement.value; 
+        this.method = this.methodElement.value;
         this.order = this.orderElement.value;
         this.size = this.sizeElement.value;
         this.delay = this.delayElement.value;
         this.quantity = this.quantityElement.value;
 
-        
+
 
         //method
-        this.methodElement.addEventListener('change',()=>{
+        this.methodElement.addEventListener('change', () => {
             setup();
         })
 
         //order
-        this.orderElement.addEventListener('change',()=>{
+        this.orderElement.addEventListener('change', () => {
             setup();
         })
 
         //size
-        this.sizeElement.addEventListener('change',()=>{
+        this.sizeElement.addEventListener('change', () => {
             setup();
         })
-        this.sizeRangeElement.addEventListener('input',()=>{
+        this.sizeRangeElement.addEventListener('input', () => {
             this.sizeElement.value = this.sizeRangeElement.value;
         })
-        this.sizeRangeElement.addEventListener('change',()=>{
+        this.sizeRangeElement.addEventListener('change', () => {
             setup();
         })
 
         //delay
-        this.delayElement.addEventListener('change',()=>{
+        this.delayElement.addEventListener('change', () => {
             setup();
         })
-        this.delayRangeElement.addEventListener('input',()=>{
+        this.delayRangeElement.addEventListener('input', () => {
             this.delayElement.value = this.delayRangeElement.value;
         })
-        this.delayRangeElement.addEventListener('change',()=>{
+        this.delayRangeElement.addEventListener('change', () => {
             setup();
         })
 
         //quantity
-        this.quantityElement.addEventListener('change',()=>{
+        this.quantityElement.addEventListener('change', () => {
             setup();
         })
-        this.quantityRangeElement.addEventListener('input',()=>{
+        this.quantityRangeElement.addEventListener('input', () => {
             this.quantityElement.value = this.quantityRangeElement.value;
         })
-        this.quantityRangeElement.addEventListener('change',()=>{
+        this.quantityRangeElement.addEventListener('change', () => {
             setup();
         })
 
         //reset button
-        this.resetBtn.addEventListener('click',()=>{
+        this.resetBtn.addEventListener('click', () => {
             setup();
         })
     }
 
-    update(){
-        this.method = this.methodElement.value; 
+    update() {
+        this.method = this.methodElement.value;
         this.order = this.orderElement.value;
         this.size = this.sizeElement.value;
         this.delay = this.delayElement.value;
@@ -399,8 +421,12 @@ class Input {
 const canvas = new Canvas('#05020a');
 const CTX = canvas.context;
 var input = new Input();
+
 var sortSettings;
-var unsortedArray;
+var graph;
+
+
+//var graph.array;
 var isSorting = false;
 
 start();
@@ -409,9 +435,11 @@ start();
 //TODO Add colors showing the sorting progress
 
 //FUNCTIONS
-function setup(){
+function setup() {
     input.update();
-    unsortedArray = new uArray(input.size);
+
+    //graph.array = new uArray(input.size);
+    graph = new Graph(input.size);
     sortSettings = new Settings(input.method, input.order, input.delay, input.quantity);
     return;
 }
@@ -459,11 +487,10 @@ function sortArray() { //TODO Add method to array class
 }
 
 function drawGraph() {
-    for (let i = 0; i < unsortedArray.access.length; i++) {
+    for (let i = 0; i < graph.array.access.length; i++) {
         let column = new Column(
             canvas.width * 0.05 + (Column.getWidth() + Column.getGap()) * i,
-            unsortedArray.access[i],
-            unsortedArray.access.length
+            graph.array.access[i]
         );
         column.draw()
 
