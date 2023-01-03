@@ -1,5 +1,5 @@
 class Settings {
-    constructor(method='selectionsort', order='increasing', delay='0', quantity='1', size='25') {
+    constructor(method='selectionsort', order='increasing', delay='20', quantity='1', size='25') {
         this.method = method;
         this.order = order;
         this.size = size;
@@ -96,8 +96,8 @@ class Canvas {
 
         function adjustFromPixelRatio() {
             //adjusting W/H proportionally to the pixel ratio with html
-            self.element.width = window.innerWidth //* self.ratio; //TODO fix pixel adjustment so it can work with bootstrap
-            self.element.height = window.innerHeight //* self.ratio; //TODO fix pixel adjustment so it can work with bootstrap 
+            self.element.width = window.innerWidth //* self.ratio; 
+            self.element.height = window.innerHeight //* self.ratio; 
             return;
         }
 
@@ -376,8 +376,6 @@ class SelectionSort {
             if (sortCondition) {
                 self.minMax.value = self.array[self.i].value;
                 self.minMax.index = self.i;
-                
-                
             }
             if(sortSettings.showColors){
                 self.array[self.minMax.index].color = graph.colors.comparison;
@@ -492,14 +490,11 @@ var isSorting;
 
 start();
 
-//TODO Add colors showing the sorting progress
-
 //FUNCTIONS
 function setup() {
     isSorting = false;
     input.update();
 
-    //graph.array = new uArray(input.size);
     sortSettings = new Settings(input.method, input.order, input.delay, input.quantity, input.size);
     graph = new Graph(sortSettings.size);
     return;
@@ -511,7 +506,7 @@ function start() {
     return;
 }
 
-function sortArray() { //TODO Add method to array class
+function sortArray() { 
     let sortMethod = sortSettings.getSortMethod();
 
     var loop = function () { //infinite loop
